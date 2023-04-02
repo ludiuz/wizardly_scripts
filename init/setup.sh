@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PWD_=$(pwd)
-PACKAGES_UNIVERSAL="git vim nano"
+PACKAGES_UNIVERSAL="git vim nano gcc"
 
 echo "create main folders (ignore if they already exits...)"
 mkdir ~/dependencies
@@ -34,9 +34,8 @@ fi
 sudo ${PM} ${INSTALL_CMD} python3 python3-pip
 
 echo "Do you want to proceed and install basic packages and tools? (y/n)"
-read answer
-
-if [[ $answer == "y" ]]; then
+read response
+if [[ "$response" =~ ^[Yy]$ ]]; then
   echo "Installing packages and tools..."
 
   PACKAGES_UNIVERSAL+=" ${PACKAGES_PM}"
@@ -51,6 +50,12 @@ if [[ $answer == "y" ]]; then
   done
 fi
 
+echo "Do you wish to install Rust? (y/n)"
+read response
+if [[ "$response" =~ ^[Yy]$ ]]; then
+	curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+fi
+
 read -p "Do you want to set up your terminal? (y/n): " response
 if [[ "$response" =~ ^[Yy]$ ]]; then
 	chmod +x ./setupTerminal.sh
@@ -59,7 +64,6 @@ fi
 
 echo "Do you wish to do basic setup of GIT? (y/n): "
 read git-answer
-
 if [[ "$git-answer" =~ ^[Yy]$ ]]; then
 	chmod +x ./setupGit.sh
 	./setupGit.sh
